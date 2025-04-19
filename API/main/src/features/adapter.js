@@ -1,22 +1,34 @@
 
 // Best game api response adapter (Internal)
-function BestGameAdapter() {
+function BestGameAdapter(response) {
 
+    return response.best;
 }
 
 // Only game api response adapter (Internal)
-function OnlyGameAdapter() {
-    
+function OnlyGameAdapter(response) {
+    return response.games;
 }
 
 // app.rawg.io api response adapter (External)
-function RawgAdapter() {
+function RawgAdapter(response) {
+    let games = [];
 
+    response.results.map(function(game) {
+        games.push({
+            name: game.name,
+            picture: game.background_image,
+            rate: game.rating,
+            released: game.released
+        })
+    })
+    return games;
 }
 
-
-module.exports = {
-    BestGameAdapter,
-    OnlyGameAdapter,
-    RawgAdapter,
+const adapters = {
+    best_games: BestGameAdapter,
+    only_games: OnlyGameAdapter,
+    rawg: RawgAdapter
 }
+
+module.exports = adapters;
