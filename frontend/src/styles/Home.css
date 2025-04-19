@@ -1,0 +1,43 @@
+body {
+    width: 100%;
+    min-height: 100vh;
+    background: #cdd2df;
+    background: radial-gradient(circle,rgb(215, 226, 250) 0%, rgb(194, 214, 245) 100%);
+    flex: 1;
+}
+
+.oracle-container {
+    height: 300px;
+    width: 500px;
+    background-color: white;
+}
+
+.home {
+    margin-top: 60px;
+    padding-top: 180px;
+}
+
+.game-card {
+    height: 400px;
+}
+
+.game-card h4 {
+    font-size: 19px;
+    font-family: 'abz';
+}
+
+.game-card h6 {
+    font-family: 'abz';
+    font-weight: 800;
+}
+
+.game-card span {
+    font-family: 'abz';
+    font-weight: 500;
+}
+
+.game-card-preview {
+    height: 70%;
+    background-size: cover;
+    background-repeat: no-repeat;
+}
