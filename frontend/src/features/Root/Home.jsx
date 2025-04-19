@@ -68,12 +68,14 @@ function Home() {
     
     const [search, setSearch] = useState("");
     const [games, setGames] = useState([]);
+    const [loading, setLoading] = useState(false);
     useEffect(()=> {
         document.title = "MY ORACLE"
     }, [])
     const search_something = (event)=> {
-        if (search.length == 0)
+        if (search.length == 0 || loading)
             return;
+        setLoading(true);
         const url = `http://localhost:4000/search/?query=${search}`;
         axios.get(url)
         .then((response)=> {
@@ -83,11 +85,14 @@ function Home() {
             alert("Unexpected error");
             console.log(err);
         })
+        .finally(()=>{
+            setLoading(false);
+        })
         
     }
     return (
         <div>
-            <Header setSearch={setSearch} search={search} onSearch={search_something}  />
+            <Header loading={loading} setSearch={setSearch} search={search} onSearch={search_something}  />
             <HomePage games={games} />
         </div>
     )
