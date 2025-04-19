@@ -1,5 +1,12 @@
 FROM node:latest
-COPY . /app
+
 WORKDIR /app
-RUN npm install && npm install serve && npm run build
-CMD [ "serve", "dist" ]
+
+COPY . .
+
+RUN npm install
+RUN npm run build
+
+# Serve le dossier dist avec 'serve'
+RUN npm install -g serve
+CMD ["serve", "-s", "dist"]

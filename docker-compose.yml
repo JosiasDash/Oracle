@@ -1,0 +1,56 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - cache:/data
+    command: redis-server --save 60 1 --loglevel warning
+    restart: always
+    networks:
+      - app-network
+  frontend:
+    build: "frontend/"
+    ports:
+      - "3000:3000"
+    depends_on:
+      - redis
+    networks:
+      - app-network
+  oracle:
+    build: "API/main"
+    ports:
+      - "4000:4000"
+    environment:
+      - REDIS_HOST=redis     # nom du service Redis dans le réseau Docker
+      - REDIS_PORT=6379
+    depends_on:
+      - frontend
+      - redis
+    networks:
+      - app-network
+  best_games:
+    build: "API/best_games"
+    ports:
+      - "4011:4011"
+    depends_on:
+      - redis
+      - oracle
+    networks:
+      - app-network
+  only_games:
+    build: "API/only_games"
+    ports:
+      - "4012:4012"
+    depends_on:
+      - redis
+      - oracle
+    networks:
+      - app-network
+volumes:
+  cache:
+    driver: local
+networks:
+  app-network:
+    driver: bridge

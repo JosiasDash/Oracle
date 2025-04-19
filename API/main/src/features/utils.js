@@ -5,7 +5,10 @@ const keys = require("./key");
 const adapters = require("./adapter");
 const Fuse = require("fuse.js");
 
-const redis = new Redis();
+const redis = new Redis({
+    host: process.env.REDIS_HOST || 'localhost',
+    port: process.env.REDIS_PORT || 6379,
+});
 
 async function FetchFromSource(microservice) {
     let url = microservice["url"] + microservice["fetch_route"];
