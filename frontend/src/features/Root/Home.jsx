@@ -1,8 +1,9 @@
-import {useEffect} from "react";
+import {useEffect, useState} from "react";
 import Header from "../../components/layout/Header";
 import {Container, Row, Col} from "react-bootstrap";
 import "../../styles/Home.css";
 import { FaStar, FaRegStar } from "react-icons/fa";
+import axios from "axios";
 
 const fc = "https://image.api.playstation.com/vulcan/ap/rnd/202409/1320/584f33ff0ba9f56e779e146ed4192e78d62efe36220b2779.png";
 const gow = "https://image.api.playstation.com/vulcan/img/rnd/202010/2217/LsaRVLF2IU2L1FNtu9d3MKLq.jpg";
@@ -18,11 +19,13 @@ function GetArray(len) {
     return arr;
 }
 
-function HomePage() {
-    const games = [
-        {name: "God of war", rate: 4, released: "01-12-2004", picture: gow},
-        {name: "FC 25", rate: 4.1, released: "01-09-2024", picture: fc}
-    ]
+function HomePage({games}) {
+    // const games = [
+    //     {name: "God of war", rate: 4, released: "01-12-2004", picture: gow},
+    //     {name: "FC 25", rate: 4.1, released: "01-09-2024", picture: fc}
+    // ]
+    
+    
     return (
         <div className="home">
             <Container className="">
@@ -63,13 +66,29 @@ function HomePage() {
 
 function Home() {
     
+    const [search, setSearch] = useState("");
+    const [games, setGames] = useState([]);
     useEffect(()=> {
         document.title = "MY ORACLE"
     }, [])
+    const search_something = (event)=> {
+        if (search.length == 0)
+            return;
+        const url = `http://localhost:4000/search/?query=${search}`;
+        axios.get(url)
+        .then((response)=> {
+            console.log(response.data);
+            setGames(response.data.result);
+        }).catch((err)=> {
+            alert("Unexpected error");
+            console.log(err);
+        })
+        
+    }
     return (
         <div>
-            <Header/>
-            <HomePage/>
+            <Header setSearch={setSearch} search={search} onSearch={search_something}  />
+            <HomePage games={games} />
         </div>
     )
 }
